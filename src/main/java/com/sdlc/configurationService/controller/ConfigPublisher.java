@@ -8,10 +8,23 @@ import com.sdlc.configurationService.model.Client;
 import com.sdlc.configurationService.model.TemplateType;
 import com.sdlc.configurationService.model.UITemplate;
 
+import org.springframework.core.io.Resource;
+import org.springframework.util.StreamUtils;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.boot.json.JsonParser;
+import java.util.Map;
+
 @RestController
 public class ConfigPublisher {
 
 	
+    @Value("gs://spring-bucket-monaj_mondal/templateConfig.json")
+    private Resource gcsFile;
+
 	@GetMapping("/service/getTemplate/client/{clientId}/templateType/{templateType}")
 	public String getTemplate(@PathVariable("clientId") String clientId,@PathVariable("templateType")TemplateType templateType){
 	
@@ -87,5 +100,18 @@ public class ConfigPublisher {
 			}
 		
 			return responseTemplate;
+	}
+
+    @GetMapping(value="/service/v2/getClientTemplate/client/{client}",produces = "application/json")
+	public Object getClientTemplateFromFile(@PathVariable("client") Client client ) throws IOException {
+	
+    
+		String jsonString= StreamUtils.copyToString( gcsFile.getInputStream(), Charset.defaultCharset());
+        JsonParser stringParser = JsonParserFactory.getJsonParser();
+	
+		Map<String, Object> jsonMap = stringParser.parseMap(jsonString);
+		
+		System.out.println("@@@ "+jsonMap.get(client.toString()));
+		return jsonMap.get(client.toString());
 	}
 }
