@@ -1,0 +1,67 @@
+{
+   "ND": {
+					  "client": "Minnesota",
+					  "templateId": "mobileTemplate",
+					  "components": [{
+					    "name": "member-details",
+					    "url": "http://localhost:8081/main.js",
+					    "componentTag": "<app-member-details></app-member-details>"
+					  },{
+					    "name": "plan-progress",
+					    "url": "http://localhost:8082/main.js",
+					    "componentTag": "<app-plan-progress></app-plan-progress>"
+					  },{
+					    "name": "plan-progress",
+					    "url": "http://localhost:8083/main.js",
+					    "componentTag": "<app-idcard></app-idcard>"
+					  }],
+					  "services" : [{
+					    "name" : "1",
+					    "endpoint": "xyz/"
+					    }, {
+					      "name" : "2",
+					      "endpoint": "abc/"
+					    }]
+					},
+   "MN": {
+					  "client": "NorthDakoda",
+					  "templateId": "webTemplate",
+					  "components": [{
+					    "name": "member-details",
+					    "url": "http://localhost:8081/main.js",
+					    "componentTag": "<app-member-details></app-member-details>"
+					  },{
+					    "name": "plan-progress",
+					    "url": "http://localhost:8082/main.js",
+					    "componentTag": "<app-plan-progress></app-plan-progress>"
+					  },{
+					    "name": "plan-progress",
+					    "url": "http://localhost:8083/main.js",
+					    "componentTag": "<app-idcard></app-idcard>"
+					  }],
+					  "services" : [{
+					    "name" : "10",
+					    "endpoint": "mny/"
+					    }, {
+					      "name" : "20",
+					      "endpoint": "abcd/"
+					    }]
+					},
+   "DW": {
+					  "client": "Delware",
+					  "templateId": "mobileTemplate",
+					  "components": [{
+					    "name": "member-details",
+					    "url": "http://localhost:8081/main.js",
+					    "componentTag": "<app-member-details></app-member-details>"
+					  },{
+					    "name": "plan-progress",
+					    "url": "http://localhost:8082/main.js",
+					    "componentTag": "<app-plan-progress></app-plan-progress>"
+					  }],
+					  "services" : [{
+					    "name" : "1",
+					    "endpoint": "xyz/"
+					    }]
+					}
+}
