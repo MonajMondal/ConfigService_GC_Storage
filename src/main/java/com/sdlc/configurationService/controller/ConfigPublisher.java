@@ -19,6 +19,7 @@ import org.springframework.boot.json.JsonParser;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ConfigPublisher {
 
 	
