@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.boot.json.JsonParser;
 import java.util.Map;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
