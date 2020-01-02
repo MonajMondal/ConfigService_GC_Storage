@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sdlc.configurationService.model.Client;
 import com.sdlc.configurationService.model.TemplateType;
 import com.sdlc.configurationService.model.UITemplate;
+import com.sdlc.configurationService.service.DroolsClient;
+import com.sdlc.servicerulerepo.ConfigurableClientTemplate;
 
 import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.nio.charset.Charset;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.boot.json.JsonParserFactory;
@@ -27,6 +31,9 @@ public class ConfigPublisher {
     @Value("gs://spring-bucket-monaj_mondal/templateConfig.json")
     private Resource gcsFile;
 
+    @Autowired
+	DroolsClient droolsClient;
+    
 	@GetMapping("/service/getTemplate/client/{clientId}/templateType/{templateType}")
 	public String getTemplate(@PathVariable("clientId") String clientId,@PathVariable("templateType")TemplateType templateType){
 	
@@ -116,4 +123,15 @@ public class ConfigPublisher {
 		System.out.println("@@@ "+jsonMap.get(client.toString()));
 		return jsonMap.get(client.toString());
 	}
+    
+    @GetMapping(value="/service/v3/getClientTemplate/client/{client}",produces = "application/json")
+   	public Object getClientTemplateFromDrools(@PathVariable("client") Client client ) throws IOException {
+   	
+       
+    	ConfigurableClientTemplate clientTemplate = new ConfigurableClientTemplate();
+	 	clientTemplate.setClientID(client.name());
+	 	
+	 	return  droolsClient.executeCommands(clientTemplate);
+	 	
+  	}
 }
