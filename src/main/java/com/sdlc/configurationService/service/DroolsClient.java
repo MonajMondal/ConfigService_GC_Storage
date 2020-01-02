@@ -3,6 +3,7 @@ package com.sdlc.configurationService.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
 import org.kie.api.KieServices;
 import org.kie.api.command.Command;
 import org.kie.api.command.KieCommands;
@@ -14,6 +15,7 @@ import org.kie.server.client.KieServicesClient;
 import org.kie.server.client.KieServicesConfiguration;
 import org.kie.server.client.KieServicesFactory;
 import org.kie.server.client.RuleServicesClient;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class DroolsClient {
 
     private KieServicesConfiguration conf;
     private KieServicesClient kieServicesClient;
-
+    
     public void initialize() {
         conf = KieServicesFactory.newRestConfiguration(URL, USER, PASSWORD);
         conf.setMarshallingFormat(FORMAT);

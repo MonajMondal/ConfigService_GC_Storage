@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sdlc.configurationService.model.Client;
 import com.sdlc.configurationService.model.TemplateType;
 import com.sdlc.configurationService.model.UITemplate;
+import com.sdlc.configurationService.model.response.ClientTemplateResponse;
 import com.sdlc.configurationService.service.DroolsClient;
+import com.sdlc.configurationService.service.ResponseBuilderService;
 import com.sdlc.servicerulerepo.ConfigurableClientTemplate;
 
 import org.springframework.core.io.Resource;
@@ -15,6 +17,8 @@ import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -27,12 +31,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ConfigPublisher {
 
+	Logger log = Logger.getLogger(ConfigPublisher.class);
 	
     @Value("gs://spring-bucket-monaj_mondal/templateConfig.json")
     private Resource gcsFile;
 
     @Autowired
-	DroolsClient droolsClient;
+	private DroolsClient droolsClient;
+    
+    @Autowired
+    private ResponseBuilderService responseBuilder;
     
 	@GetMapping("/service/getTemplate/client/{clientId}/templateType/{templateType}")
 	public String getTemplate(@PathVariable("clientId") String clientId,@PathVariable("templateType")TemplateType templateType){
@@ -113,7 +121,8 @@ public class ConfigPublisher {
 
     @GetMapping(value="/service/v2/getClientTemplate/client/{client}",produces = "application/json")
 	public Object getClientTemplateFromFile(@PathVariable("client") Client client ) throws IOException {
-	
+    	log.info("getClientTemplateFromFile ## "+client);
+
     
 		String jsonString= StreamUtils.copyToString( gcsFile.getInputStream(), Charset.defaultCharset());
         JsonParser stringParser = JsonParserFactory.getJsonParser();
@@ -125,13 +134,13 @@ public class ConfigPublisher {
 	}
     
     @GetMapping(value="/service/v3/getClientTemplate/client/{client}",produces = "application/json")
-   	public Object getClientTemplateFromDrools(@PathVariable("client") Client client ) throws IOException {
-   	
+   	public ClientTemplateResponse getClientTemplateFromDrools(@PathVariable("client") Client client ) throws IOException {
+    	log.info("getClientTemplateFromDrools ## "+client);
        
     	ConfigurableClientTemplate clientTemplate = new ConfigurableClientTemplate();
 	 	clientTemplate.setClientID(client.name());
 	 	
-	 	return  droolsClient.executeCommands(clientTemplate);
+	 	return  responseBuilder.buildResponse(droolsClient.executeCommands(clientTemplate));
 	 	
   	}
 }
